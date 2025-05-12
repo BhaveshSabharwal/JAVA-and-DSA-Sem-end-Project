@@ -1,0 +1,21 @@
+@startuml
+actor User
+participant Main
+participant UserInputHandler
+participant TimetableGenerator
+participant TimetablePrinter
+participant TimetableFileHandler
+
+User -> Main: Select "Generate Timetable"
+Main -> UserInputHandler: getSubjects()
+UserInputHandler -> User: Enter subjects
+Main -> UserInputHandler: getDurations()
+UserInputHandler -> User: Enter durations
+Main -> UserInputHandler: getTeachers()
+UserInputHandler -> User: Enter teachers
+Main -> TimetableGenerator: generateTimetable()
+TimetableGenerator -> TimetableGenerator: create SubjectSessions
+TimetableGenerator -> TimetableGenerator: assign time slots
+Main -> TimetablePrinter: printTimetables()
+Main -> TimetableFileHandler: saveToJson()
+@enduml

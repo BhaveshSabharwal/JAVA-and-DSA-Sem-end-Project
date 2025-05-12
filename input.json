@@ -1,0 +1,60 @@
+{
+    "subjects": [
+        {
+            "name": "M",
+            "duration": 2,
+            "sessions": 3,
+            "teachers": [
+                "Dr. S",
+                "Pf. J"
+            ]
+        },
+        {
+            "name": "P",
+            "duration": 1,
+            "sessions": 4,
+            "teachers": [
+                "Dr. B",
+                "Ms. D"
+            ]
+        },
+        {
+            "name": "C",
+            "duration": 2,
+            "sessions": 3,
+            "teachers": [
+                "Pf. W",
+                "Dr. L"
+            ]
+        },
+        {
+            "name": "B",
+            "duration": 1,
+            "sessions": 2,
+            "teachers": [
+                "Dr. A",
+                "Pf. T"
+            ]
+        },
+        {
+            "name": "E",
+            "duration": 1,
+            "sessions": 5,
+            "teachers": [
+                "Ms. C",
+                "Mr. L"
+            ]
+        },
+        {
+            "name": "H",
+            "duration": 1,
+            "sessions": 2,
+            "teachers": [
+                "Pf. W",
+                "Dr. H"
+            ]
+        }
+    ],
+    "days_per_week": 5,
+    "sections": 3
+}

@@ -1,0 +1,20 @@
+@startuml
+node "User Workstation" {
+    artifact "TimetableApp.jar" as app
+    database "Input Files" as inputs
+    database "Output Files" as outputs
+}
+
+node "Server" {
+    component "Database" as db
+}
+
+app --> inputs : Reads config
+app --> outputs : Writes timetables
+app --> db : (Future) Stores data
+
+note right of app
+    Java application
+    requires JRE 17+
+end note
+@enduml

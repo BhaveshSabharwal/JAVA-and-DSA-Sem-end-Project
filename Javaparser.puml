@@ -1,0 +1,36 @@
+@startuml
+class com.example.Main {
+- {static} int START_TIME
+- {static} int END_TIME
+- {static} int RECESS_START
+- {static} int RECESS_END
+- {static} Random random
+- {static} Scanner scanner
++ {static} void main(String[])
+- {static} void generateTimetableInteractive()
+- {static} void generateTimetableFromFile()
+- {static} void printExistingTimetable()
+- {static} void generateAndSaveTimetable(List<String>,Map<String,Integer>,Map<String,Integer>,Map<String,List<String>>,List<String>,int)
+- {static} List<String> getSubjects()
+- {static} Map<String,Integer> getDurations(List<String>)
+- {static} Map<String,Integer> getSessionsPerWeek(List<String>)
+- {static} Map<String,List<String>> getTeachers(List<String>)
+- {static} List<String> getWeekDays()
+- {static} List<Integer> generateDailySlots()
+- {static} List<String> generateSlotLabels(List<Integer>)
+- {static} Map<String,Map<String,Map<String,Map<String,String>>>> assignSubjectsWithTeachers(List<String>,Map<String,Integer>,Map<String,Integer>,Map<String,List<String>>,List<String>,int,List<Integer>)
+- {static} void printTimetables(Map<String,Map<String,Map<String,Map<String,String>>>>,List<String>,List<String>,Map<String,Integer>)
+- {static} void saveToJson(Map<String,Map<String,Map<String,Map<String,String>>>>,String,Map<String,Integer>)
+}
+
+
+class com.example.Main$SubjectSession {
+~ String subject
+~ int duration
+~ String teacher
+}
+
+
+
+com.example.Main +.. com.example.Main$SubjectSession
+@enduml

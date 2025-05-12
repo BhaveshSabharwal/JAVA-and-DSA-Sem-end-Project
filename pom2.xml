@@ -32,7 +32,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>generate-all-uml</id>
+                        <id>generate-uml</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>exec</goal>
@@ -42,7 +42,8 @@
                             <arguments>
                                 <argument>-jar</argument>
                                 <argument>${project.basedir}/plantuml.jar</argument>
-                                <argument>${project.basedir}/</argument>
+                                <argument>${project.basedir}/Javaparser.puml</argument>
+                                <argument>src/main/resources/uml</argument>
                             </arguments>
                         </configuration>
                     </execution>
