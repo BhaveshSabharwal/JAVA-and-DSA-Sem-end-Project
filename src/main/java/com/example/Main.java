@@ -3,7 +3,10 @@ package com.example;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+// import java.util.ArrayList;
 import java.util.Collections;
+// import java.util.HashMap;
+// import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -14,9 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.example.detastructures.ArrayList;
-import com.example.detastructures.HashMap;
-import com.example.detastructures.HashSet;
+import com.example.detastructures.*;
 
 public class Main {
     private static final int START_TIME = 9;
@@ -35,7 +36,6 @@ public class Main {
         TimetableGenerator timetableGenerator = new TimetableGenerator();
         TimetablePrinter timetablePrinter = new TimetablePrinter();
         TimetableFileHandler fileHandler = new TimetableFileHandler();
-        deleteTimetable deleteTimetable = new deleteTimetable();
 
         while (true) {
             int choice = inputHandler.getMenuChoice();
@@ -55,9 +55,6 @@ public class Main {
                         inputHandler.generateOrEditInputFile();
                         break;
                     case 5:
-                        deleteTimetableFile(inputHandler, fileHandler);
-                        break;
-                    case 6:
                         System.out.println("Exiting program. Goodbye!");
                         return;
                     default:
@@ -254,22 +251,6 @@ public class Main {
             System.out.println("✅ Input file saved to " + saveFilename);
         } catch (IOException e) {
             System.err.println("❌ Error saving file: " + e.getMessage());
-        }
-    }
-
-    // Delete existing Timetable
-    private static void deleteTimetableFile(UserInputHandler inputHandler,
-            TimetableFileHandler fileHandler) {
-
-        System.out.println("\n🗑️ Delete Timetable File");
-        System.out.println("=======================");
-
-        String filename = inputHandler.getFilename("Enter filename to delete (e.g., timetable.json): ");
-
-        if (new deleteTimetable().deleteFile(filename)) {
-            System.out.println("File deletion successful");
-        } else {
-            System.out.println("File deletion failed");
         }
     }
 

@@ -1,8 +1,0 @@
-@startuml
-[*] --> Idle
-Idle --> DataCollection: User selects generate
-DataCollection --> Processing: All data collected
-Processing --> Output: Timetable generated
-Output --> [*]: Process complete
-Output --> DataCollection: User wants modifications
-@enduml

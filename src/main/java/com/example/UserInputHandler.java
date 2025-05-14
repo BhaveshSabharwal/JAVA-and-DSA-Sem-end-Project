@@ -187,9 +187,8 @@ public class UserInputHandler {
         System.out.println("2. Generate new timetable (from JSON input file)");
         System.out.println("3. Print existing timetable from JSON file");
         System.out.println("4. Generate/edit input JSON file");
-        System.out.println("5. Delete existing timetable");
-        System.out.println("6. Exit");
-        System.out.print("Enter your choice (1-6): ");
+        System.out.println("5. Exit");
+        System.out.print("Enter your choice (1-5): ");
 
         int choice = scanner.nextInt();
         scanner.nextLine(); // consume newline
@@ -207,4 +206,4 @@ public class UserInputHandler {
         scanner.nextLine(); // consume newline
         return numSections;
     }
-}
+} 
