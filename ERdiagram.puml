@@ -1,0 +1,29 @@
+@startuml
+entity Subject {
+  + name [PK]
+  --
+  duration
+}
+
+entity Teacher {
+  + name [PK]
+}
+
+entity Timetable {
+  + id [PK]
+  --
+  section_name
+  day_of_week
+  time_slot
+}
+
+entity Session {
+  + id [PK]
+  --
+  duration
+}
+
+Subject ||--o{ Session
+Teacher ||--o{ Session
+Timetable ||--o{ Session
+@enduml

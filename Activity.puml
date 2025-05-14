@@ -1,0 +1,14 @@
+@startuml
+start
+:User selects option;
+if (Option?) then (Generate New)
+  :Collect input data;
+  :Generate timetable;
+  :Print timetable;
+  :Save to file;
+else (View Existing)
+  :Load from file;
+  :Print timetable;
+endif
+stop
+@enduml
