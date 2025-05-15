@@ -3,6 +3,7 @@ package com.example;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 import com.example.detastructures.ArrayList;
 import com.example.detastructures.HashMap;
 import com.example.detastructures.HashSet;
+import com.example.detastructures.Queue;
 
 public class Main {
     // Constants for timetable configuration
@@ -419,113 +421,89 @@ public class Main {
             String sectionName = "Section " + sec;
             Map<String, Map<String, Map<String, String>>> dayMap = new HashMap<>();
             Set<String> usedSlots = new HashSet<>();
-            Map<String, Map<String, Integer>> subjectDayCounts = new HashMap<>(); // Track subject counts per day
-            List<SubjectSession> subjectSessions = new ArrayList<>();
+            Map<String, Map<String, Integer>> subjectDayCounts = new HashMap<>();
+            Queue<SubjectSession> sessionQueue = new Queue<>();
 
-            // Initialize subjectDayCounts map
+            // Initialize subjectDayCounts
             for (String subject : subjects) {
-                subjectDayCounts.put(subject, new HashMap<>());
+                Map<String, Integer> dayCount = new HashMap<>();
                 for (String day : weekDays) {
-                    subjectDayCounts.get(subject).put(day, 0);
+                    dayCount.put(day, 0);
                 }
+                subjectDayCounts.put(subject, dayCount);
             }
 
-            // Create all required subject sessions
+            // Create subject sessions and add them to the queue
             for (String subj : subjects) {
                 int sessions = sessionsPerWeek.get(subj);
                 for (int i = 0; i < sessions; i++) {
                     String teacher = teachers.get(subj).get(random.nextInt(teachers.get(subj).size()));
-                    subjectSessions.add(new SubjectSession(subj, durations.get(subj), teacher));
+                    sessionQueue.add(new SubjectSession(subj, durations.get(subj), teacher));
                 }
             }
 
-            // Shuffle the sessions
-            Collections.shuffle(subjectSessions);
+            int maxAttempts = sessionQueue.size() * 100;
+            int attempt = 0;
 
-            // Place each session in the timetable
-            for (SubjectSession session : subjectSessions) {
+            while (!sessionQueue.isEmpty() && attempt < maxAttempts) {
+                SubjectSession session = sessionQueue.poll();
                 boolean placed = false;
-                int attempts = 0;
 
-                while (!placed && attempts < 100) {
-                    String day = weekDays.get(random.nextInt(weekDays.size()));
+                Collections.shuffle(weekDays); // Randomize day preference
 
-                    // Check if this subject already has max classes on this day
+                for (String day : weekDays) {
                     int currentCount = subjectDayCounts.get(session.subject).get(day);
-                    if ((session.duration == 1 && currentCount >= 2) ||
-                            (session.duration == 2 && currentCount >= 1)) {
-                        attempts++;
+                    if ((session.duration == 1 && currentCount >= 2) || (session.duration == 2 && currentCount >= 1)) {
                         continue;
                     }
 
-                    // For 2-hour classes, we need to find two consecutive slots not at the end
-                    int startIdx;
+                    int startIdx = -1;
+                    List<Integer> slotRange = new ArrayList<>();
+
                     if (session.duration == 2) {
-                        if (dailySlots.size() < 2) {
-                            attempts++;
-                            continue;
-                        }
-
-                        // Find all possible starting positions for 2-hour classes
-                        List<Integer> possibleStarts = new ArrayList<>();
                         for (int i = 0; i < dailySlots.size() - 1; i++) {
-                            // Ensure we're not at the last period
-                            if (i >= dailySlots.size() - 2) {
-                                continue; // Skip last two slots for 2-hour classes
-                            }
-
-                            int firstSlot = dailySlots.get(i);
-                            int secondSlot = dailySlots.get(i + 1);
-                            if (firstSlot + 1 == secondSlot) { // Check if consecutive
-                                String timeKey1 = day + "-" + String.format("%02d00", firstSlot);
-                                String timeKey2 = day + "-" + String.format("%02d00", secondSlot);
-                                if (!usedSlots.contains(timeKey1) && !usedSlots.contains(timeKey2)) {
-                                    possibleStarts.add(i);
+                            if (i >= dailySlots.size() - 2)
+                                continue;
+                            int first = dailySlots.get(i), second = dailySlots.get(i + 1);
+                            if (first + 1 == second) {
+                                String t1 = day + "-" + String.format("%02d00", first);
+                                String t2 = day + "-" + String.format("%02d00", second);
+                                if (!usedSlots.contains(t1) && !usedSlots.contains(t2)) {
+                                    slotRange = Arrays.asList(first, second);
+                                    startIdx = i;
+                                    break;
                                 }
                             }
                         }
-
-                        if (possibleStarts.isEmpty()) {
-                            attempts++;
-                            continue;
-                        }
-
-                        startIdx = possibleStarts.get(random.nextInt(possibleStarts.size()));
                     } else {
-                        // For 1-hour classes, just find any available slot
-                        List<Integer> availableSlots = new ArrayList<>();
                         for (int i = 0; i < dailySlots.size(); i++) {
-                            String timeKey = day + "-" + String.format("%02d00", dailySlots.get(i));
+                            int slot = dailySlots.get(i);
+                            String timeKey = day + "-" + String.format("%02d00", slot);
                             if (!usedSlots.contains(timeKey)) {
-                                availableSlots.add(i);
+                                slotRange = List.of(slot);
+                                startIdx = i;
+                                break;
                             }
                         }
-
-                        if (availableSlots.isEmpty()) {
-                            attempts++;
-                            continue;
-                        }
-
-                        startIdx = availableSlots.get(random.nextInt(availableSlots.size()));
                     }
 
-                    // Check if all slots in range are available
-                    boolean conflict = false;
-                    List<Integer> slotRange = dailySlots.subList(startIdx, startIdx + session.duration);
+                    if (startIdx == -1 || slotRange.isEmpty())
+                        continue;
+
+                    // Final check for conflicts
+                    boolean hasConflict = false;
                     for (int slot : slotRange) {
                         String timeKey = day + "-" + String.format("%02d00", slot);
                         if (usedSlots.contains(timeKey)) {
-                            conflict = true;
+                            hasConflict = true;
                             break;
                         }
                     }
 
-                    if (conflict) {
-                        attempts++;
+                    if (hasConflict)
                         continue;
-                    }
 
-                    // Place the session
+                    // Assign session
                     for (int slot : slotRange) {
                         String timeKey = day + "-" + String.format("%02d00", slot);
                         usedSlots.add(timeKey);
@@ -533,16 +511,20 @@ public class Main {
                         dayMap.putIfAbsent(day, new HashMap<>());
                         dayMap.get(day).put(
                                 String.format("%02d00", slot),
-                                Map.of(
-                                        "subject", session.subject,
-                                        "teacher", session.teacher));
+                                Map.of("subject", session.subject, "teacher", session.teacher));
                     }
 
-                    // Update subject count for this day
-                    subjectDayCounts.get(session.subject).put(day,
-                            subjectDayCounts.get(session.subject).get(day) + 1);
+                    // Update counts
+                    subjectDayCounts.get(session.subject).put(day, currentCount + 1);
                     placed = true;
+                    break;
                 }
+
+                if (!placed) {
+                    sessionQueue.add(session); // Retry later
+                }
+
+                attempt++;
             }
 
             sectionTimetable.put(sectionName, dayMap);
