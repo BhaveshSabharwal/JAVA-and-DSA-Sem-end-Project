@@ -1,0 +1,694 @@
+{
+  "Section 4": {
+    "Monday": {
+      "1500": {
+        "subject": "BEE",
+        "teacher": "Priya",
+        "duration": 1
+      },
+      "1400": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Oose",
+        "teacher": "Suhani",
+        "duration": 1
+      },
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Hardik",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Dsa",
+        "teacher": "Hardik",
+        "duration": 2
+      }
+    },
+    "Thursday": {
+      "1500": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      }
+    },
+    "Friday": {
+      "1100": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      }
+    },
+    "Wednesday": {
+      "1500": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "BEE",
+        "teacher": "Ana",
+        "duration": 1
+      },
+      "1100": {
+        "subject": "Java",
+        "teacher": "Deepak",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Deepak",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Oose",
+        "teacher": "Arshiya",
+        "duration": 1
+      }
+    },
+    "Tuesday": {
+      "1500": {
+        "subject": "FEE",
+        "teacher": "Parul",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "FEE",
+        "teacher": "Parul",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Oose",
+        "teacher": "Suhani",
+        "duration": 1
+      },
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Gagan",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Dsa",
+        "teacher": "Gagan",
+        "duration": 2
+      }
+    }
+  },
+  "Section 3": {
+    "Thursday": {
+      "1500": {
+        "subject": "Oose",
+        "teacher": "Arshiya sh",
+        "duration": 1
+      },
+      "1400": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Bhavesh",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Dsa",
+        "teacher": "Bhavesh",
+        "duration": 2
+      }
+    },
+    "Monday": {
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Hardik",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Dsa",
+        "teacher": "Hardik",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      }
+    },
+    "Friday": {
+      "1400": {
+        "subject": "Oose",
+        "teacher": "Arshiya sh",
+        "duration": 1
+      },
+      "1300": {
+        "subject": "BEE",
+        "teacher": "Chirayu",
+        "duration": 1
+      },
+      "1100": {
+        "subject": "FEE",
+        "teacher": "Parul",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "FEE",
+        "teacher": "Parul",
+        "duration": 2
+      }
+    },
+    "Wednesday": {
+      "1500": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "BEE",
+        "teacher": "Chirayu",
+        "duration": 1
+      },
+      "0900": {
+        "subject": "Oose",
+        "teacher": "Suhani",
+        "duration": 1
+      }
+    },
+    "Tuesday": {
+      "1500": {
+        "subject": "Java",
+        "teacher": "Gunpreet",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Java",
+        "teacher": "Gunpreet",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "FEE",
+        "teacher": "Anubhav",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "FEE",
+        "teacher": "Anubhav",
+        "duration": 2
+      }
+    }
+  },
+  "Section 6": {
+    "Thursday": {
+      "1500": {
+        "subject": "Java",
+        "teacher": "Deepak",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Java",
+        "teacher": "Deepak",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "BEE",
+        "teacher": "Divyansh",
+        "duration": 1
+      }
+    },
+    "Monday": {
+      "1100": {
+        "subject": "Dsa",
+        "teacher": "Garv",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Garv",
+        "duration": 2
+      }
+    },
+    "Friday": {
+      "1600": {
+        "subject": "Oose",
+        "teacher": "Gagan",
+        "duration": 1
+      },
+      "1400": {
+        "subject": "FEE",
+        "teacher": "Abhijeet",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "FEE",
+        "teacher": "Abhijeet",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Java",
+        "teacher": "Agam",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Agam",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "BEE",
+        "teacher": "Ana",
+        "duration": 1
+      }
+    },
+    "Wednesday": {
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Hardik",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Dsa",
+        "teacher": "Hardik",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Oose",
+        "teacher": "Gagan",
+        "duration": 1
+      },
+      "1000": {
+        "subject": "FEE",
+        "teacher": "Spinder",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "FEE",
+        "teacher": "Spinder",
+        "duration": 2
+      }
+    },
+    "Tuesday": {
+      "1400": {
+        "subject": "Oose",
+        "teacher": "Arshiya sh",
+        "duration": 1
+      },
+      "1100": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      }
+    }
+  },
+  "Section 5": {
+    "Monday": {
+      "1500": {
+        "subject": "BEE",
+        "teacher": "Chirayu",
+        "duration": 1
+      },
+      "1400": {
+        "subject": "Java",
+        "teacher": "Agam",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Java",
+        "teacher": "Agam",
+        "duration": 2
+      }
+    },
+    "Thursday": {
+      "1600": {
+        "subject": "BEE",
+        "teacher": "Ana",
+        "duration": 1
+      },
+      "1500": {
+        "subject": "Dsa",
+        "teacher": "Bilakshan",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Bilakshan",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Oose",
+        "teacher": "Suhani",
+        "duration": 1
+      },
+      "1100": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Oose",
+        "teacher": "Arshiya sh",
+        "duration": 1
+      }
+    },
+    "Friday": {
+      "1500": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Java",
+        "teacher": "Gunpreet",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Gunpreet",
+        "duration": 2
+      }
+    },
+    "Wednesday": {
+      "1400": {
+        "subject": "Java",
+        "teacher": "Gunpreet",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Java",
+        "teacher": "Gunpreet",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      }
+    },
+    "Tuesday": {
+      "1500": {
+        "subject": "Dsa",
+        "teacher": "Bilakshan",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Bilakshan",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Oose",
+        "teacher": "Suhani",
+        "duration": 1
+      }
+    }
+  },
+  "Section 2": {
+    "Monday": {
+      "1600": {
+        "subject": "Oose",
+        "teacher": "Suhani",
+        "duration": 1
+      },
+      "1500": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "BEE",
+        "teacher": "Auyush",
+        "duration": 1
+      },
+      "1100": {
+        "subject": "FEE",
+        "teacher": "Anubhav",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "FEE",
+        "teacher": "Anubhav",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "BEE",
+        "teacher": "Ana",
+        "duration": 1
+      }
+    },
+    "Thursday": {
+      "1400": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Dsa",
+        "teacher": "Garv",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Garv",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Oose",
+        "teacher": "Arshiya",
+        "duration": 1
+      }
+    },
+    "Friday": {
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      }
+    },
+    "Wednesday": {
+      "1400": {
+        "subject": "Java",
+        "teacher": "Agam",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Java",
+        "teacher": "Agam",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Oose",
+        "teacher": "Bilakshan",
+        "duration": 1
+      }
+    },
+    "Tuesday": {
+      "1400": {
+        "subject": "Java",
+        "teacher": "Deepak",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "Java",
+        "teacher": "Deepak",
+        "duration": 2
+      }
+    }
+  },
+  "Section 1": {
+    "Thursday": {
+      "1500": {
+        "subject": "Oose",
+        "teacher": "Gagan",
+        "duration": 1
+      },
+      "1400": {
+        "subject": "FEE",
+        "teacher": "Tamana",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "FEE",
+        "teacher": "Tamana",
+        "duration": 2
+      }
+    },
+    "Monday": {
+      "1100": {
+        "subject": "BEE",
+        "teacher": "Auyush",
+        "duration": 1
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Java",
+        "teacher": "Aryan",
+        "duration": 2
+      }
+    },
+    "Friday": {
+      "1600": {
+        "subject": "Oose",
+        "teacher": "Arshiya sh",
+        "duration": 1
+      },
+      "1500": {
+        "subject": "Dsa",
+        "teacher": "Garv",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Garv",
+        "duration": 2
+      },
+      "1100": {
+        "subject": "Java",
+        "teacher": "Dilpreet",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Java",
+        "teacher": "Dilpreet",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Oose",
+        "teacher": "Suhani",
+        "duration": 1
+      }
+    },
+    "Wednesday": {
+      "1500": {
+        "subject": "Dsa",
+        "teacher": "Bhavesh",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Dsa",
+        "teacher": "Bhavesh",
+        "duration": 2
+      },
+      "1300": {
+        "subject": "BEE",
+        "teacher": "Priya",
+        "duration": 1
+      },
+      "1100": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "FEE",
+        "teacher": "Gagank",
+        "duration": 2
+      }
+    },
+    "Tuesday": {
+      "1500": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      },
+      "1400": {
+        "subject": "Java",
+        "teacher": "Harpreet",
+        "duration": 2
+      },
+      "1000": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      },
+      "0900": {
+        "subject": "Dsa",
+        "teacher": "Garuav",
+        "duration": 2
+      }
+    }
+  }
+}

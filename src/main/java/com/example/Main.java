@@ -19,45 +19,58 @@ import com.example.detastructures.HashMap;
 import com.example.detastructures.HashSet;
 
 public class Main {
-    private static final int START_TIME = 9;
-    private static final int END_TIME = 17;
-    private static final int RECESS_START = 12;
-    private static final int RECESS_END = 13;
+    // Constants for timetable configuration
+    private static final int START_TIME = 9; // School day starts at 9:00
+    private static final int END_TIME = 17; // School day ends at 17:00
+    private static final int RECESS_START = 12; // Recess starts at 12:00
+    private static final int RECESS_END = 13; // Recess ends at 13:00
 
-    private static final Random random = new Random();
-    private static final Scanner scanner = new Scanner(System.in);
+    // Utility objects
+    private static final Random random = new Random(); // For random selections
+    private static final Scanner scanner = new Scanner(System.in); // For user input
 
     public static void main(String[] args) {
+        // Display welcome message
         System.out.println("🎓 Student Timetable Generator 🎓");
         System.out.println("=================================");
 
+        // Initialize helper classes
         UserInputHandler inputHandler = new UserInputHandler();
         TimetableGenerator timetableGenerator = new TimetableGenerator();
         TimetablePrinter timetablePrinter = new TimetablePrinter();
         TimetableFileHandler fileHandler = new TimetableFileHandler();
         deleteTimetable deleteTimetable = new deleteTimetable();
 
+        // Main program loop
         while (true) {
+            // Get user's menu choice
             int choice = inputHandler.getMenuChoice();
 
             try {
+                // Process user choice
                 switch (choice) {
                     case 1:
+                        // Generate timetable interactively with user input
                         generateTimetableInteractive(inputHandler, timetableGenerator, timetablePrinter, fileHandler);
                         break;
                     case 2:
+                        // Generate timetable from input file
                         generateTimetableFromFile(inputHandler, timetableGenerator, timetablePrinter, fileHandler);
                         break;
                     case 3:
+                        // Print existing timetable from file
                         printExistingTimetable(inputHandler, timetablePrinter, fileHandler);
                         break;
                     case 4:
+                        // Generate or edit input configuration file
                         inputHandler.generateOrEditInputFile();
                         break;
                     case 5:
+                        // Delete timetable file
                         deleteTimetableFile(inputHandler, fileHandler);
                         break;
                     case 6:
+                        // Exit program
                         System.out.println("Exiting program. Goodbye!");
                         return;
                     default:
@@ -69,12 +82,16 @@ public class Main {
         }
     }
 
+    /**
+     * Generates a timetable interactively by prompting the user for input
+     */
     private static void generateTimetableInteractive(
             UserInputHandler inputHandler,
             TimetableGenerator timetableGenerator,
             TimetablePrinter timetablePrinter,
             TimetableFileHandler fileHandler) throws Exception {
 
+        // Get all required inputs from user
         List<String> subjects = inputHandler.getSubjects();
         Map<String, Integer> durations = inputHandler.getDurations(subjects);
         Map<String, Integer> sessionsPerWeek = inputHandler.getSessionsPerWeek(subjects);
@@ -82,29 +99,38 @@ public class Main {
         List<String> weekDays = inputHandler.getWeekDays();
         int numSections = inputHandler.getNumberOfSections();
 
+        // Generate time slots for the timetable
         List<Integer> dailySlots = timetableGenerator.generateDailySlots();
         List<String> slotLabels = timetableGenerator.generateSlotLabels(dailySlots);
 
+        // Generate the actual timetable data structure
         Map<String, Map<String, Map<String, Map<String, String>>>> timetables = timetableGenerator.generateTimetable(
                 subjects, durations, sessionsPerWeek, teachers, weekDays, numSections);
 
+        // Print the generated timetable
         timetablePrinter.printTimetables(timetables, weekDays, slotLabels, durations);
 
+        // Save to file
         String filename = inputHandler.getFilename("Enter filename to save (e.g., timetables.json): ");
         fileHandler.saveToJson(timetables, filename, durations);
 
         System.out.println("\n✅ Timetable generation complete!");
     }
 
+    /**
+     * Generates a timetable from an input configuration file
+     */
     private static void generateTimetableFromFile(
             UserInputHandler inputHandler,
             TimetableGenerator timetableGenerator,
             TimetablePrinter timetablePrinter,
             TimetableFileHandler fileHandler) throws Exception {
 
+        // Load input configuration from file
         String inputFile = inputHandler.getFilename("Enter input JSON filename (e.g., input.json): ");
         Map<String, Object> inputData = fileHandler.loadInputFile(inputFile);
 
+        // Extract configuration data from input file
         @SuppressWarnings("unchecked")
         List<String> subjects = (List<String>) inputData.get("subjects");
         @SuppressWarnings("unchecked")
@@ -117,42 +143,48 @@ public class Main {
         List<String> weekDays = (List<String>) inputData.get("weekDays");
         int numSections = (int) inputData.get("numSections");
 
+        // Generate time slots
         List<Integer> dailySlots = timetableGenerator.generateDailySlots();
         List<String> slotLabels = timetableGenerator.generateSlotLabels(dailySlots);
 
+        // Generate timetable
         Map<String, Map<String, Map<String, Map<String, String>>>> timetables = timetableGenerator.generateTimetable(
                 subjects, durations, sessionsPerWeek, teachers, weekDays, numSections);
 
+        // Print and save timetable
         timetablePrinter.printTimetables(timetables, weekDays, slotLabels, durations);
-
         String filename = inputHandler.getFilename("Enter filename to save (e.g., timetables.json): ");
         fileHandler.saveToJson(timetables, filename, durations);
 
         System.out.println("\n✅ Timetable generation complete!");
     }
 
+    /**
+     * Loads and prints an existing timetable from a file
+     */
     private static void printExistingTimetable(
             UserInputHandler inputHandler,
             TimetablePrinter timetablePrinter,
             TimetableFileHandler fileHandler) throws Exception {
 
+        // Load timetable file
         String filename = inputHandler.getFilename("Enter timetable JSON filename to print (e.g., timetable.json): ");
         Map<String, Map<String, Map<String, Map<String, String>>>> timetables = fileHandler.loadTimetable(filename);
 
-        // Extract week days from the timetable
+        // Extract week days from the timetable data
         List<String> weekDays = timetables.values().stream()
                 .flatMap(section -> section.keySet().stream())
                 .distinct()
                 .sorted()
                 .toList();
 
-        // Generate slot labels
+        // Generate time slot labels
         List<Integer> dailySlots = List.of(9, 10, 11, 13, 14, 15, 16);
         List<String> slotLabels = dailySlots.stream()
                 .map(t -> String.format("%02d00 - %02d00", t, t + 1))
                 .toList();
 
-        // Extract durations from the timetable
+        // Extract subject durations from the timetable
         Map<String, Integer> durations = new java.util.HashMap<>();
         timetables.values().forEach(section -> section.values().forEach(day -> day.values().forEach(time -> {
             String subject = time.get("subject");
@@ -161,9 +193,13 @@ public class Main {
             }
         })));
 
+        // Print the timetable
         timetablePrinter.printTimetables(timetables, weekDays, slotLabels, durations);
     }
 
+    /**
+     * Generates or edits an input configuration file
+     */
     private static void generateOrEditInputFile() {
         System.out.println("\n📝 Generate/Edit Input JSON File");
         System.out.println("===============================");
@@ -212,6 +248,7 @@ public class Main {
             }
         }
 
+        // Add new subjects if needed
         if (subjectsArray.isEmpty()) {
             System.out.println("\nEnter subjects (leave name blank to finish):");
             while (true) {
@@ -276,6 +313,12 @@ public class Main {
     private static List<String> getSubjects() {
         System.out.println("\nEnter subjects (comma separated, e.g.: Math,English,Biology):");
         String input = scanner.nextLine();
+
+        while (input.trim().isEmpty()) {
+            System.out.println("❌ At least one subject is required!");
+            input = scanner.nextLine();
+        }
+
         String[] subjectArray = input.split(",");
         List<String> subjects = new ArrayList<>();
         for (String subject : subjectArray) {
@@ -287,17 +330,18 @@ public class Main {
     private static Map<String, Integer> getDurations(List<String> subjects) {
         Map<String, Integer> durations = new HashMap<>();
         System.out.println("\nEnter duration (in hours) for each subject (1 or 2 only):");
+
         for (String subject : subjects) {
             int duration;
             do {
                 System.out.print(subject + ": ");
                 duration = scanner.nextInt();
                 if (duration != 1 && duration != 2) {
-                    System.out.println("Please enter only 1 or 2 for duration");
+                    System.out.println("❌ Please enter only 1 or 2 for duration");
                 }
-            } while (duration != 1 && duration != 2);
+            } while (duration != 1 && duration != 2); // Keeps asking until valid
             durations.put(subject, duration);
-            scanner.nextLine(); // consume newline
+            scanner.nextLine(); // Consume newline
         }
         return durations;
     }
