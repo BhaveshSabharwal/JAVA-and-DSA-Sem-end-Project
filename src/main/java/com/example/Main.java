@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -22,14 +23,14 @@ import com.example.detastructures.Queue;
 
 public class Main {
     // Constants for timetable configuration
-    private static final int START_TIME = 9; // School day starts at 9:00
-    private static final int END_TIME = 17; // School day ends at 17:00
-    private static final int RECESS_START = 12; // Recess starts at 12:00
-    private static final int RECESS_END = 13; // Recess ends at 13:00
+    public static final int START_TIME = 9; // School day starts at 9:00
+    public static final int END_TIME = 17; // School day ends at 17:00
+    public static final int RECESS_START = 12; // Recess starts at 12:00
+    public static final int RECESS_END = 13; // Recess ends at 13:00
 
     // Utility objects
-    private static final Random random = new Random(); // For random selections
-    private static final Scanner scanner = new Scanner(System.in); // For user input
+    public static final Random random = new Random(); // For random selections
+    public static final Scanner scanner = new Scanner(System.in); // For user input
 
     public static void main(String[] args) {
         // Display welcome message
@@ -51,32 +52,35 @@ public class Main {
             try {
                 // Process user choice
                 switch (choice) {
-                    case 1:
+                    case 1 -> {
                         // Generate timetable interactively with user input
-                        generateTimetableInteractive(inputHandler, timetableGenerator, timetablePrinter, fileHandler);
-                        break;
-                    case 2:
+                        generateTimetableInteractive(inputHandler, timetableGenerator, timetablePrinter,
+                                fileHandler);
+                    }
+                    case 2 -> {
                         // Generate timetable from input file
                         generateTimetableFromFile(inputHandler, timetableGenerator, timetablePrinter, fileHandler);
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         // Print existing timetable from file
                         printExistingTimetable(inputHandler, timetablePrinter, fileHandler);
-                        break;
-                    case 4:
+                    }
+                    case 4 -> {
                         // Generate or edit input configuration file
                         inputHandler.generateOrEditInputFile();
-                        break;
-                    case 5:
+                    }
+                    case 5 -> {
                         // Delete timetable file
                         deleteTimetableFile(inputHandler, fileHandler);
-                        break;
-                    case 6:
+                    }
+                    case 6 -> {
                         // Exit program
                         System.out.println("Exiting program. Goodbye!");
                         return;
-                    default:
+                    }
+                    default -> {
                         System.out.println("Invalid choice. Please try again.");
+                    }
                 }
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
@@ -85,29 +89,34 @@ public class Main {
     }
 
     /**
-     * Generates a timetable interactively by prompting the user for input
+     * Generates a timetable interactively with user input and validation
      */
-    private static void generateTimetableInteractive(
+    public static void generateTimetableInteractive(
             UserInputHandler inputHandler,
             TimetableGenerator timetableGenerator,
             TimetablePrinter timetablePrinter,
             TimetableFileHandler fileHandler) throws Exception {
 
-        // Get all required inputs from user
+        // Get all required inputs from user with validation
         List<String> subjects = inputHandler.getSubjects();
-        Map<String, Integer> durations = inputHandler.getDurations(subjects);
-        Map<String, Integer> sessionsPerWeek = inputHandler.getSessionsPerWeek(subjects);
-        Map<String, List<String>> teachers = inputHandler.getTeachers(subjects);
         List<String> weekDays = inputHandler.getWeekDays();
-        int numSections = inputHandler.getNumberOfSections();
+        Map<String, Integer> durations = inputHandler.getDurations(subjects);
+        Map<String, Integer> sessionsPerWeek = getSessionsPerWeek(subjects, weekDays);
+        Map<String, List<String>> teachers = getTeachers(subjects);
+
+        // Validate inputs before generation
+        validateSessionsPerWeek(sessionsPerWeek, weekDays);
+        validateTeachers(teachers, subjects);
 
         // Generate time slots for the timetable
         List<Integer> dailySlots = timetableGenerator.generateDailySlots();
         List<String> slotLabels = timetableGenerator.generateSlotLabels(dailySlots);
 
-        // Generate the actual timetable data structure
-        Map<String, Map<String, Map<String, Map<String, String>>>> timetables = timetableGenerator.generateTimetable(
-                subjects, durations, sessionsPerWeek, teachers, weekDays, numSections);
+        // Generate the actual timetable
+        Map<String, Map<String, Map<String, Map<String, String>>>> timetables = timetableGenerator
+                .generateTimetable(
+                        subjects, durations, sessionsPerWeek, teachers, weekDays,
+                        inputHandler.getNumberOfSections());
 
         // Print the generated timetable
         timetablePrinter.printTimetables(timetables, weekDays, slotLabels, durations);
@@ -120,9 +129,48 @@ public class Main {
     }
 
     /**
+     * Validates if sessions per week exceed available days
+     * 
+     * @throws IllegalArgumentException if validation fails
+     */
+    private static void validateSessionsPerWeek(
+            Map<String, Integer> sessionsPerWeek,
+            List<String> weekDays) {
+        int maxSessions = weekDays.size() * 2; // Max 2 sessions/day per subject
+        for (Map.Entry<String, Integer> entry : sessionsPerWeek.entrySet()) {
+            if (entry.getValue() > maxSessions) {
+                throw new IllegalArgumentException(
+                        "❌ Too many sessions for " + entry.getKey() +
+                                ". Max allowed: " + maxSessions + " (for " +
+                                weekDays.size() + " days)");
+            }
+        }
+    }
+
+    /**
+     * Validates that all subjects have at least one teacher assigned
+     * 
+     * @throws IllegalArgumentException if validation fails
+     */
+    private static void validateTeachers(
+            Map<String, List<String>> teachers,
+            List<String> subjects) {
+        for (String subject : subjects) {
+            if (!teachers.containsKey(subject)) {
+                throw new IllegalArgumentException(
+                        "❌ No teachers assigned for subject: " + subject);
+            }
+            if (teachers.get(subject).isEmpty()) {
+                throw new IllegalArgumentException(
+                        "❌ Empty teacher list for subject: " + subject);
+            }
+        }
+    }
+
+    /**
      * Generates a timetable from an input configuration file
      */
-    private static void generateTimetableFromFile(
+    public static void generateTimetableFromFile(
             UserInputHandler inputHandler,
             TimetableGenerator timetableGenerator,
             TimetablePrinter timetablePrinter,
@@ -150,8 +198,9 @@ public class Main {
         List<String> slotLabels = timetableGenerator.generateSlotLabels(dailySlots);
 
         // Generate timetable
-        Map<String, Map<String, Map<String, Map<String, String>>>> timetables = timetableGenerator.generateTimetable(
-                subjects, durations, sessionsPerWeek, teachers, weekDays, numSections);
+        Map<String, Map<String, Map<String, Map<String, String>>>> timetables = timetableGenerator
+                .generateTimetable(
+                        subjects, durations, sessionsPerWeek, teachers, weekDays, numSections);
 
         // Print and save timetable
         timetablePrinter.printTimetables(timetables, weekDays, slotLabels, durations);
@@ -164,13 +213,14 @@ public class Main {
     /**
      * Loads and prints an existing timetable from a file
      */
-    private static void printExistingTimetable(
+    public static void printExistingTimetable(
             UserInputHandler inputHandler,
             TimetablePrinter timetablePrinter,
             TimetableFileHandler fileHandler) throws Exception {
 
         // Load timetable file
-        String filename = inputHandler.getFilename("Enter timetable JSON filename to print (e.g., timetable.json): ");
+        String filename = inputHandler
+                .getFilename("Enter timetable JSON filename to print (e.g., timetable.json): ");
         Map<String, Map<String, Map<String, Map<String, String>>>> timetables = fileHandler.loadTimetable(filename);
 
         // Extract week days from the timetable data
@@ -202,7 +252,7 @@ public class Main {
     /**
      * Generates or edits an input configuration file
      */
-    private static void generateOrEditInputFile() {
+    public static void generateOrEditInputFile() {
         System.out.println("\n📝 Generate/Edit Input JSON File");
         System.out.println("===============================");
 
@@ -297,7 +347,7 @@ public class Main {
     }
 
     // Delete existing Timetable
-    private static void deleteTimetableFile(UserInputHandler inputHandler,
+    public static void deleteTimetableFile(UserInputHandler inputHandler,
             TimetableFileHandler fileHandler) {
 
         System.out.println("\n🗑️ Delete Timetable File");
@@ -312,7 +362,7 @@ public class Main {
         }
     }
 
-    private static List<String> getSubjects() {
+    public static List<String> getSubjects() {
         System.out.println("\nEnter subjects (comma separated, e.g.: Math,English,Biology):");
         String input = scanner.nextLine();
 
@@ -329,7 +379,7 @@ public class Main {
         return subjects;
     }
 
-    private static Map<String, Integer> getDurations(List<String> subjects) {
+    public static Map<String, Integer> getDurations(List<String> subjects) {
         Map<String, Integer> durations = new HashMap<>();
         System.out.println("\nEnter duration (in hours) for each subject (1 or 2 only):");
 
@@ -348,35 +398,85 @@ public class Main {
         return durations;
     }
 
-    private static Map<String, Integer> getSessionsPerWeek(List<String> subjects) {
+    /**
+     * Gets number of sessions per week for each subject with validation
+     */
+    public static Map<String, Integer> getSessionsPerWeek(
+            List<String> subjects,
+            List<String> weekDays) {
         Map<String, Integer> sessions = new HashMap<>();
-        System.out.println("\nEnter number of sessions per week for each subject:");
+        int maxSessions = weekDays.size() * 2;
+
+        System.out.println("\nEnter number of sessions per week for each subject");
+        System.out.println("(Maximum " + maxSessions + " sessions allowed):");
+
         for (String subject : subjects) {
-            System.out.print(subject + ": ");
-            sessions.put(subject, scanner.nextInt());
-            scanner.nextLine(); // consume newline
+            while (true) {
+                try {
+                    System.out.print(subject + ": ");
+                    int numSessions = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    if (numSessions <= 0) {
+                        System.out.println("❌ Sessions must be greater than 0");
+                        continue;
+                    }
+                    if (numSessions > maxSessions) {
+                        System.out.println("❌ Cannot exceed " + maxSessions + " sessions");
+                        continue;
+                    }
+
+                    sessions.put(subject, numSessions);
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("❌ Please enter a valid number");
+                    scanner.nextLine(); // Clear invalid input
+                }
+            }
         }
         return sessions;
     }
 
-    private static Map<String, List<String>> getTeachers(List<String> subjects) {
+    /**
+     * Gets teachers for each subject with validation
+     */
+    public static Map<String, List<String>> getTeachers(List<String> subjects) {
         Map<String, List<String>> teachers = new HashMap<>();
-        System.out.println("\nEnter teachers for each subject (comma separated):");
+        System.out.println("\nEnter at least one teacher per subject (comma separated):");
+
         for (String subject : subjects) {
-            System.out.print(subject + ": ");
-            String input = scanner.nextLine();
-            String[] teacherArray = input.split(",");
-            List<String> teacherList = new ArrayList<>();
-            for (String teacher : teacherArray) {
-                teacherList.add(teacher.trim());
+            while (true) {
+                System.out.print(subject + ": ");
+                String input = scanner.nextLine().trim();
+
+                if (input.isEmpty()) {
+                    System.out.println("❌ At least one teacher required");
+                    continue;
+                }
+
+                String[] teacherArray = input.split(",");
+                List<String> teacherList = new ArrayList<>();
+                for (String teacher : teacherArray) {
+                    String trimmed = teacher.trim();
+                    if (!trimmed.isEmpty()) {
+                        teacherList.add(trimmed);
+                    }
+                }
+
+                if (teacherList.isEmpty()) {
+                    System.out.println("❌ Invalid teacher list");
+                } else {
+                    teachers.put(subject, teacherList);
+                    break;
+                }
             }
-            teachers.put(subject, teacherList);
         }
         return teachers;
     }
 
-    private static List<String> getWeekDays() {
-        System.out.println("\nEnter week days (comma separated, default: Monday,Tuesday,Wednesday,Thursday,Friday):");
+    public static List<String> getWeekDays() {
+        System.out
+                .println("\nEnter week days (comma separated, default: Monday,Tuesday,Wednesday,Thursday,Friday):");
         String input = scanner.nextLine();
         if (input.trim().isEmpty()) {
             return List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
@@ -389,7 +489,10 @@ public class Main {
         return days;
     }
 
-    private static List<Integer> generateDailySlots() {
+    /**
+     * Generates time slots for the school day (9:00-17:00, excluding recess)
+     */
+    public static List<Integer> generateDailySlots() {
         List<Integer> slots = new ArrayList<>();
         int t = START_TIME;
         while (t < END_TIME) {
@@ -403,7 +506,10 @@ public class Main {
         return slots;
     }
 
-    private static List<String> generateSlotLabels(List<Integer> slots) {
+    /**
+     * Creates formatted time slot labels (e.g., "0900 - 1000")
+     */
+    public static List<String> generateSlotLabels(List<Integer> slots) {
         List<String> labels = new ArrayList<>();
         for (int t : slots) {
             labels.add(String.format("%02d00 - %02d00", t, t + 1));
@@ -411,7 +517,7 @@ public class Main {
         return labels;
     }
 
-    private static Map<String, Map<String, Map<String, Map<String, String>>>> assignSubjectsWithTeachers(
+    public static Map<String, Map<String, Map<String, Map<String, String>>>> assignSubjectsWithTeachers(
             List<String> subjects, Map<String, Integer> durations, Map<String, Integer> sessionsPerWeek,
             Map<String, List<String>> teachers, List<String> weekDays, int numSections, List<Integer> dailySlots) {
 
@@ -533,12 +639,13 @@ public class Main {
         return sectionTimetable;
     }
 
-    private static void printTimetables(
+    public static void printTimetables(
             Map<String, Map<String, Map<String, Map<String, String>>>> timetables,
             List<String> weekDays, List<String> slotLabels,
             Map<String, Integer> durations) {
 
-        for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> sectionEntry : timetables.entrySet()) {
+        for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> sectionEntry : timetables
+                .entrySet()) {
             System.out.println("\n\n==== " + sectionEntry.getKey() + " Time Table ====");
 
             // Print header
@@ -582,7 +689,7 @@ public class Main {
         }
     }
 
-    private static void printTimeSlot(Map<String, String> entry, Map<String, Integer> durations) {
+    public static void printTimeSlot(Map<String, String> entry, Map<String, Integer> durations) {
         if (entry != null) {
             String cell = entry.get("subject") + " (" + entry.get("teacher") + ")";
             if (durations.get(entry.get("subject")) == 2) {
@@ -594,7 +701,7 @@ public class Main {
         }
     }
 
-    private static void saveToJson(
+    public static void saveToJson(
             Map<String, Map<String, Map<String, Map<String, String>>>> timetables,
             String filename,
             Map<String, Integer> durations) {
@@ -645,6 +752,9 @@ public class Main {
         }
     }
 
+    /**
+     * Helper class to represent a subject session
+     */
     static class SubjectSession {
         String subject;
         int duration;

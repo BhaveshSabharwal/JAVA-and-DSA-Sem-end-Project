@@ -4,9 +4,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,47 +19,71 @@ public class TimetableFileHandler {
             Map<String, Map<String, Map<String, Map<String, String>>>> timetables,
             String filename,
             Map<String, Integer> durations) throws IOException {
-        try (FileWriter file = new FileWriter(filename)) {
-            String json = "{\n";
-            boolean firstSection = true;
 
-            for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> section : timetables.entrySet()) {
-                if (!firstSection) {
-                    json += ",\n";
-                }
-                firstSection = false;
+        // Validate input parameters
+        if (timetables == null) {
+            throw new IllegalArgumentException("Timetables map cannot be null");
+        }
+        if (filename == null || filename.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filename cannot be null or empty");
+        }
 
-                json += "  \"" + section.getKey() + "\": {\n";
-                boolean firstDay = true;
+        JSONObject rootJson = new JSONObject();
 
-                for (Map.Entry<String, Map<String, Map<String, String>>> day : section.getValue().entrySet()) {
-                    if (!firstDay) {
-                        json += ",\n";
-                    }
-                    firstDay = false;
+        for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> sectionEntry : Optional
+                .ofNullable(timetables).orElse(Collections.emptyMap()).entrySet()) {
 
-                    json += "    \"" + day.getKey() + "\": {\n";
-                    boolean firstTime = true;
-
-                    for (Map.Entry<String, Map<String, String>> time : day.getValue().entrySet()) {
-                        if (!firstTime) {
-                            json += ",\n";
-                        }
-                        firstTime = false;
-
-                        json += "      \"" + time.getKey() + "\": {\n";
-                        json += "        \"subject\": \"" + time.getValue().get("subject") + "\",\n";
-                        json += "        \"teacher\": \"" + time.getValue().get("teacher") + "\",\n";
-                        json += "        \"duration\": " + durations.get(time.getValue().get("subject")) + "\n";
-                        json += "      }";
-                    }
-                    json += "\n    }";
-                }
-                json += "\n  }";
+            if (sectionEntry.getKey() == null || sectionEntry.getValue() == null) {
+                continue;
             }
-            json += "\n}";
 
-            file.write(json);
+            JSONObject sectionJson = new JSONObject();
+
+            for (Map.Entry<String, Map<String, Map<String, String>>> dayEntry : Optional
+                    .ofNullable(sectionEntry.getValue()).orElse(Collections.emptyMap()).entrySet()) {
+
+                if (dayEntry.getKey() == null || dayEntry.getValue() == null) {
+                    continue;
+                }
+
+                JSONObject dayJson = new JSONObject();
+
+                for (Map.Entry<String, Map<String, String>> timeEntry : Optional.ofNullable(dayEntry.getValue())
+                        .orElse(Collections.emptyMap()).entrySet()) {
+
+                    if (timeEntry.getKey() == null || timeEntry.getValue() == null) {
+                        continue;
+                    }
+
+                    JSONObject slotJson = new JSONObject();
+                    Map<String, String> slotData = timeEntry.getValue();
+
+                    // Safely handle all fields with defaults
+                    String subject = Optional.ofNullable(slotData.get("subject")).orElse("Unknown");
+                    String teacher = Optional.ofNullable(slotData.get("teacher")).orElse("Unknown");
+                    int duration = Optional.ofNullable(durations)
+                            .map(d -> d.get(subject))
+                            .orElse(1); // Default duration of 1 hour
+
+                    slotJson.put("subject", subject);
+                    slotJson.put("teacher", teacher);
+                    slotJson.put("duration", duration);
+
+                    dayJson.put(timeEntry.getKey(), slotJson);
+                }
+
+                if (!dayJson.isEmpty()) {
+                    sectionJson.put(dayEntry.getKey(), dayJson);
+                }
+            }
+
+            if (!sectionJson.isEmpty()) {
+                rootJson.put(sectionEntry.getKey(), sectionJson);
+            }
+        }
+
+        try (FileWriter file = new FileWriter(filename)) {
+            file.write(rootJson.toJSONString());
             System.out.println("✅ Timetable saved to " + filename);
         }
     }
