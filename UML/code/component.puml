@@ -1,4 +1,4 @@
-@startuml
+    @startuml
 component "Timetable System" as ts {
     component "Main Application" as main
     component "User Input Handler" as input

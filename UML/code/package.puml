@@ -1,22 +1,23 @@
-@startuml
+@startuml package
 package "com.example" {
-    package "core" {
-        class Main
-        class SubjectSession
-    }
+  package "core" {
+    [Main]
+    [TimetableGenerator]
+    [TimetablePrinter]
+  }
 
-    package "services" {
-        class TimetableGenerator
-        class TimetablePrinter
-        class TimetableFileHandler
-    }
+  package "io" {
+    [TimetableFileHandler]
+    [UserInputHandler]
+  }
 
-    package "ui" {
-        class UserInputHandler
-    }
+  package "test" {
+    [MainTest]
+    [TimetableGeneratorTest]
+  }
 }
 
-Main --> services
-Main --> ui
-services --> core
+[Main] --> [TimetableGenerator]
+[Main] --> [TimetableFileHandler]
+[Main] --> [UserInputHandler]
 @enduml

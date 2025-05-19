@@ -1,4 +1,4 @@
-@startuml
+@startuml er
 entity Subject {
   + name [PK]
   --
@@ -12,18 +12,19 @@ entity Teacher {
 entity Timetable {
   + id [PK]
   --
-  section_name
-  day_of_week
-  time_slot
+  section
+  day
 }
 
-entity Session {
-  + id [PK]
+entity TimeSlot {
+  + start_time [PK]
+  + end_time [PK]
   --
-  duration
+  subject
+  teacher
 }
 
-Subject ||--o{ Session
-Teacher ||--o{ Session
-Timetable ||--o{ Session
+Subject ||-o{ TimeSlot
+Teacher ||-o{ TimeSlot
+Timetable ||-o{ TimeSlot
 @enduml

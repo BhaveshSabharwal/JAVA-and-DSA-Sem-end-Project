@@ -1,22 +1,20 @@
-@startuml
-object mathSubject {
-  name = "Mathematics"
-  duration = 2
-  sessions = 4
-  teachers = ["Dr. Smith", "Prof. Johnson"]
-}
-
-object timetableEntry {
+@startuml object
+object monday {
   day = "Monday"
-  time = "0900"
-  subject = mathSubject.name
-  teacher = "Dr. Smith"
-  duration = mathSubject.duration
 }
 
-object sectionA {
-  timetable = timetableEntry
+object mathClass {
+  subject = "Math"
+  teacher = "Mr. Smith"
+  time = "9:00-10:00"
 }
 
-note left of mathSubject: Sample objects showing\nrelationships during\ntimetable generation
+object scienceClass {
+  subject = "Science"
+  teacher = "Ms. Johnson"
+  time = "10:00-11:00"
+}
+
+monday *-- mathClass
+monday *-- scienceClass
 @enduml

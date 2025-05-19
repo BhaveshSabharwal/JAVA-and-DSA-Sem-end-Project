@@ -1,14 +1,19 @@
-@startuml
+@startuml activity
+title Timetable Generation Process
+
 start
-:User selects option;
-if (Option?) then (Generate New)
-  :Collect input data;
-  :Generate timetable;
-  :Print timetable;
-  :Save to file;
-else (View Existing)
-  :Load from file;
-  :Print timetable;
-endif
+:Input Subjects and Constraints;
+repeat
+  :Generate Time Slots;
+  :Assign Subjects to Slots;
+repeat while (All subjects placed?) is (No)
+->Yes;
+:Validate Timetable;
+if (Valid?) then (Yes)
+  :Save to JSON;
+  :Print Timetable;
+else (No)
+  :Adjust Constraints;
+  repeat
 stop
 @enduml
