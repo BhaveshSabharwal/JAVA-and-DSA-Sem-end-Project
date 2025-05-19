@@ -1,288 +1,167 @@
 @startuml
-class com.example.Main {
-+ {static} int START_TIME
-+ {static} int END_TIME
-+ {static} int RECESS_START
-+ {static} int RECESS_END
-+ {static} Random random
-+ {static} Scanner scanner
-+ {static} void main(String[])
-+ {static} void generateTimetableInteractive(UserInputHandler,TimetableGenerator,TimetablePrinter,TimetableFileHandler)
-- {static} void validateSessionsPerWeek(Map<String,Integer>,List<String>)
-- {static} void validateTeachers(Map<String,List<String>>,List<String>)
-+ {static} void generateTimetableFromFile(UserInputHandler,TimetableGenerator,TimetablePrinter,TimetableFileHandler)
-+ {static} void printExistingTimetable(UserInputHandler,TimetablePrinter,TimetableFileHandler)
-+ {static} void generateOrEditInputFile()
-+ {static} void deleteTimetableFile(UserInputHandler,TimetableFileHandler)
-+ {static} List<String> getSubjects()
-+ {static} Map<String,Integer> getDurations(List<String>)
-+ {static} Map<String,Integer> getSessionsPerWeek(List<String>,List<String>)
-+ {static} Map<String,List<String>> getTeachers(List<String>)
-+ {static} List<String> getWeekDays()
-+ {static} List<Integer> generateDailySlots()
-+ {static} List<String> generateSlotLabels(List<Integer>)
-+ {static} Map<String,Map<String,Map<String,Map<String,String>>>> assignSubjectsWithTeachers(List<String>,Map<String,Integer>,Map<String,Integer>,Map<String,List<String>>,List<String>,int,List<Integer>)
-+ {static} void printTimetables(Map<String,Map<String,Map<String,Map<String,String>>>>,List<String>,List<String>,Map<String,Integer>)
-+ {static} void printTimeSlot(Map<String,String>,Map<String,Integer>)
-+ {static} void saveToJson(Map<String,Map<String,Map<String,Map<String,String>>>>,String,Map<String,Integer>)
-}
-note left of com.example.Main::START_TIME
- School day starts at 9:00
-end note
-note right of com.example.Main::END_TIME
- School day ends at 17:00
-end note
-note left of com.example.Main::RECESS_START
- Recess starts at 12:00
-end note
-note right of com.example.Main::RECESS_END
- Recess ends at 13:00
-end note
-note left of com.example.Main::random
- For random selections
-end note
-note right of com.example.Main::scanner
- For user input
-end note
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
 
-note left of com.example.Main::generateTimetableInteractive(UserInputHandler,TimetableGenerator,TimetablePrinter,TimetableFileHandler)
+package com.example {
+    class Main {
+        + {static} int START_TIME
+        + {static} int END_TIME
+        + {static} int RECESS_START
+        + {static} int RECESS_END
+        + {static} Random random
+        + {static} Scanner scanner
+        + {static} void main(String[])
+        + {static} void generateTimetableInteractive(...)
+        + {static} void generateTimetableFromFile(...)
+        + {static} void printExistingTimetable(...)
+        + {static} void generateOrEditInputFile()
+        + {static} void deleteTimetableFile(...)
+        + {static} List<String> getSubjects()
+        + {static} Map<String,Integer> getDurations(...)
+        + {static} Map<String,Integer> getSessionsPerWeek(...)
+        + {static} Map<String,List<String>> getTeachers(...)
+        + {static} List<String> getWeekDays()
+        + {static} List<Integer> generateDailySlots()
+        + {static} List<String> generateSlotLabels(...)
+        + {static} Map<String,Map<...>>> assignSubjectsWithTeachers(...)
+        + {static} void printTimetables(...)
+        + {static} void printTimeSlot(...)
+        + {static} void saveToJson(...)
+        - {static} void validateSessionsPerWeek(...)
+        - {static} void validateTeachers(...)
+    }
 
-     * Generates a timetable interactively with user input and validation
-     
-end note
-note right of com.example.Main::validateSessionsPerWeek(Map<String,Integer>,List<String>)
+    class Main$SubjectSession {
+        ~ String subject
+        ~ int duration
+        ~ String teacher
+        ~ <<Create>> SubjectSession(String,int,String)
+    }
 
-     * Validates if sessions per week exceed available days
-     * 
-     * @throws IllegalArgumentException if validation fails
-     
-end note
-note left of com.example.Main::validateTeachers(Map<String,List<String>>,List<String>)
+    class TimetableGenerator {
+        + <<Create>> TimetableGenerator()
+        + List<Integer> generateDailySlots()
+        + List<String> generateSlotLabels(...)
+        + Map<String,Map<...>>> generateTimetable(...)
+    }
 
-     * Validates that all subjects have at least one teacher assigned
-     * 
-     * @throws IllegalArgumentException if validation fails
-     
-end note
-note right of com.example.Main::generateTimetableFromFile(UserInputHandler,TimetableGenerator,TimetablePrinter,TimetableFileHandler)
+    class TimetablePrinter {
+        + void printTimetables(...)
+    }
 
-     * Generates a timetable from an input configuration file
-     
-end note
-note left of com.example.Main::printExistingTimetable(UserInputHandler,TimetablePrinter,TimetableFileHandler)
+    class TimetableFileHandler {
+        + void saveToJson(...)
+        + Map<String,Object> loadInputFile(String)
+        + Map<String,Map<...>>> loadTimetable(String)
+    }
 
-     * Loads and prints an existing timetable from a file
-     
-end note
-note right of com.example.Main::generateOrEditInputFile()
+    class deleteTimetable {
+        + boolean deleteFile(String)
+    }
 
-     * Generates or edits an input configuration file
-     
-end note
-note left of com.example.Main::deleteTimetableFile(UserInputHandler,TimetableFileHandler)
- Delete existing Timetable
-end note
-note right of com.example.Main::getSessionsPerWeek(List<String>,List<String>)
+    class SubjectSession {
+        - String subject
+        - int duration
+        - String teacher
+        + <<Create>> SubjectSession(String,int,String)
+        + String getSubject()
+        + int getDuration()
+        + String getTeacher()
+    }
 
-     * Gets number of sessions per week for each subject with validation
-     
-end note
-note left of com.example.Main::getTeachers(List<String>)
+    class UserInputHandler {
+        + <<Create>> UserInputHandler()
+        + List<String> getSubjects()
+        + Map<String,Integer> getDurations(...)
+        + Map<String,Integer> getSessionsPerWeek(...)
+        + Map<String,List<String>> getTeachers(...)
+        + List<String> getWeekDays()
+        + void generateOrEditInputFile()
+        + int getMenuChoice()
+        + String getFilename(String)
+        + int getNumberOfSections()
+    }
 
-     * Gets teachers for each subject with validation
-     
-end note
-note right of com.example.Main::generateDailySlots()
+    class MainTest {
+        ~ void testGenerateDailySlots()
+        ~ void testGenerateSlotLabels()
+        ~ void testAssignSubjectsWithTeachers()
+    }
 
-     * Generates time slots for the school day (9:00-17:00, excluding recess)
-     
-end note
-note left of com.example.Main::generateSlotLabels(List<Integer>)
+    class TimetableGeneratorTest {
+        ~ void testTimetableGeneration()
+    }
 
-     * Creates formatted time slot labels (e.g., "0900 - 1000")
-     
-end note
+    class TimetableFileHandlerTest {
+        ~ Path tempDir
+        + void testSaveAndLoadTimetable()
+    }
 
-class com.example.Main$SubjectSession {
-~ String subject
-~ int duration
-~ String teacher
-~ <<Create>> SubjectSession(String,int,String)
-}
-note top of com.example.Main$SubjectSession
-
-     * Helper class to represent a subject session
-     
-end note
-
-
-
-class com.example.TimetableFileHandler {
-+ void saveToJson(Map<String,Map<String,Map<String,Map<String,String>>>>,String,Map<String,Integer>)
-+ Map<String,Object> loadInputFile(String)
-+ Map<String,Map<String,Map<String,Map<String,String>>>> loadTimetable(String)
+    class UserInputHandlerTest {
+        ~ void testGetSubjects()
+        ~ void testGetDurations()
+    }
 }
 
-class com.example.TimetableFileHandlerTest {
-~ Path tempDir
-+ void testSaveAndLoadTimetable()
+package com.example.datastructures {
+    class ArrayList {
+        - Object[] elements
+        - int size
+        + <<Create>> ArrayList()
+        + void add(T)
+        + T get(int)
+        + T remove(int)
+        + int size()
+        + String toString()
+    }
+
+    class HashMap {
+        - Entry<K,V>[] buckets
+        - int size
+        + <<Create>> HashMap()
+        + void put(K,V)
+        + V get(K)
+        + boolean containsKey(K)
+        + V remove(K)
+        + int size()
+        + String toString()
+    }
+
+    class HashMap$Entry {
+        ~ K key
+        ~ V value
+        ~ Entry<K,V> next
+        ~ <<Create>> Entry(K,V)
+    }
+
+    class HashSet {
+        + <<Create>> HashSet()
+        + boolean add(T)
+        + boolean contains(T)
+        + boolean remove(T)
+        + int size()
+        + String toString()
+    }
+
+    class Queue {
+        + <<Create>> Queue()
+        + void enqueue(T)
+        + T dequeue()
+        + T peek()
+        + boolean isEmpty()
+        + int size()
+    }
+
+    class Queue$Node {
+        ~ T data
+        ~ Node<T> next
+        ~ <<Create>> Node(T)
+    }
 }
 
+' Relationships (only the meaningful ones kept)
+Main +.. Main$SubjectSession
+HashMap +.. HashMap$Entry
+Queue +.. Queue$Node
 
-class com.example.MainTest {
-~ void testGenerateDailySlots()
-~ void testGenerateSlotLabels()
-~ void testAssignSubjectsWithTeachers()
-}
-
-class com.example.deleteTimetable {
-+ boolean deleteFile(String)
-}
-
-class com.example.SubjectSession {
-- String subject
-- int duration
-- String teacher
-+ <<Create>> SubjectSession(String,int,String)
-+ String getSubject()
-+ int getDuration()
-+ String getTeacher()
-}
-
-
-class com.example.detastructures.Queue {
-}
-class com.example.datastructures.HashSet {
-- {static} int INITIAL_CAPACITY
-- {static} float LOAD_FACTOR
-- LinkedList<T>[] buckets
-- int size
-+ <<Create>> HashSet()
-+ boolean add(T)
-+ boolean contains(T)
-+ boolean remove(T)
-+ int size()
-- int getBucketIndex(T)
-- void resize()
-+ String toString()
-}
-
-
-class com.example.UserInputHandlerTest {
-~ void testGetSubjects()
-~ void testGetDurations()
-}
-
-class com.example.datastructures.ArrayList {
-- Object[] elements
-- int size
-- {static} int DEFAULT_CAPACITY
-+ <<Create>> ArrayList()
-+ void add(T)
-+ T get(int)
-+ T remove(int)
-+ int size()
-+ String toString()
-- void ensureCapacity()
-- void checkIndex(int)
-}
-
-
-class com.example.TimetableGenerator {
-- {static} int START_TIME
-- {static} int END_TIME
-- {static} int RECESS_START
-- {static} int RECESS_END
-- Random random
-+ <<Create>> TimetableGenerator()
-+ List<Integer> generateDailySlots()
-+ List<String> generateSlotLabels(List<Integer>)
-+ Map<String,Map<String,Map<String,Map<String,String>>>> generateTimetable(List<String>,Map<String,Integer>,Map<String,Integer>,Map<String,List<String>>,List<String>,int)
-}
-
-
-class com.example.detastructures.ArrayList {
-}
-class com.example.TimetableGeneratorTest {
-~ void testTimetableGeneration()
-}
-
-class com.example.detastructures.HashMap {
-}
-class com.example.TimetablePrinter {
-+ void printTimetables(Map<String,Map<String,Map<String,Map<String,String>>>>,List<String>,List<String>,Map<String,Integer>)
-- void printTimeSlot(Map<String,String>,Map<String,Integer>)
-}
-
-class com.example.UserInputHandler {
-- Scanner scanner
-+ <<Create>> UserInputHandler()
-+ List<String> getSubjects()
-+ Map<String,Integer> getDurations(List<String>)
-+ Map<String,Integer> getSessionsPerWeek(List<String>)
-+ Map<String,List<String>> getTeachers(List<String>)
-+ List<String> getWeekDays()
-+ void generateOrEditInputFile()
-+ int getMenuChoice()
-+ String getFilename(String)
-+ int getNumberOfSections()
-}
-
-
-class com.example.detastructures.HashSet {
-}
-class com.example.datastructures.HashMap {
-- {static} int INITIAL_CAPACITY
-- {static} float LOAD_FACTOR
-- Entry<K,V>[] buckets
-- int size
-+ <<Create>> HashMap()
-+ void put(K,V)
-+ V get(K)
-+ boolean containsKey(K)
-+ V remove(K)
-+ int size()
-- int getIndex(K)
-- void resize()
-+ String toString()
-}
-
-
-class com.example.datastructures.HashMap$Entry {
-~ K key
-~ V value
-~ Entry<K,V> next
-~ <<Create>> Entry(K,V)
-}
-
-
-class com.example.datastructures.Queue {
-- Node<T> front
-- Node<T> rear
-- int size
-+ <<Create>> Queue()
-+ void enqueue(T)
-+ T dequeue()
-+ T peek()
-+ boolean isEmpty()
-+ int size()
-}
-
-
-class com.example.datastructures.Queue$Node {
-~ T data
-~ Node<T> next
-~ <<Create>> Node(T)
-}
-
-
-
-
-com.example.Main +.. com.example.Main$SubjectSession
-com.example.detastructures.LinkedList <|-- com.example.detastructures.Queue
-com.example.detastructures.ArrayList <|-- com.example.detastructures.ArrayList
-com.example.detastructures.HashMap <|-- com.example.detastructures.HashMap
-com.example.detastructures.HashSet <|-- com.example.detastructures.HashSet
-com.example.datastructures.HashMap +.. com.example.datastructures.HashMap$Entry
-com.example.datastructures.Queue +.. com.example.datastructures.Queue$Node
 @enduml
