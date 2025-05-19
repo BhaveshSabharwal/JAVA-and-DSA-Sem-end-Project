@@ -1,6 +1,7 @@
 target
 *.zip
 *.vscode
+*.idea
 *.jar
 *.tar.gz
 *.tar
